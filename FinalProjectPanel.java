@@ -21,7 +21,7 @@ public class FinalProjectPanel extends JPanel
    private String[] search;
    private int arrLength;
    private String link = "";
-   //private String text = "";
+   private String webStr = "";
    private boolean allFound = true;
 
    public FinalProjectPanel ()
@@ -52,24 +52,33 @@ public class FinalProjectPanel extends JPanel
             arrLength = Integer.parseInt (text.getText());
             search = new String[arrLength];
             count++;
+            info.setText("Enter search string " + (arrind + 1));
          }
          
          else if (arrind > arrLength - 1) {
             info.setText("thanks!");
+
+            // DEBUG
+            for (int i = 0; i < arrLength; i++) {
+               System.out.println(search[i]);
+            }
             
             try {
-            //text = openWebpage(link);
+               webStr = openWebpage(link);
             } catch (SecurityException e) {
-               Thread.currentThread().interrupt();
+               //Thread.currentThread().interrupt();
+               System.exit(-1);
+            } catch (Exception ex) {
+               System.exit(-2);
             }
          
-            for (int i = 0; i < arrind.length; i++) {
-               if (text.indexOf(arrind[i] == -1)) {
+            for (int i = 0; i < arrLength; i++) {
+               if (!webStr.contains(search[i])) {
                   allFound = false;
                }
             }
             
-            if (allFound == false) {
+            if (!allFound) {
                info.setText("Not all of those words were found in your website.");
             }
             else {
@@ -108,7 +117,6 @@ public class FinalProjectPanel extends JPanel
       }
 
       String result = sb.toString();
-      System.out.println(result);
 
       result = result.replaceAll("<[^>]*>", "");
       System.out.println("Contents of the web page: "+result);
