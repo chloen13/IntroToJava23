@@ -11,7 +11,6 @@ import javax.net.ssl.*;
 
 public class FinalProject
 {
-   
    public static void main (String[] args)
    {
       try { // so the program can be run anywhere

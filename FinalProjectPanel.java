@@ -14,30 +14,27 @@ import javax.net.ssl.*;
 public class FinalProjectPanel extends JPanel
 {
 
-   private JLabel info;
-   private JTextField text;
-   private int count = 0;
-   private int arrind = 0;
-   private String[] search;
-   private int arrLength;
-   private String link = "";
-   private String webStr = "";
-   private boolean allFound = true;
+   private JLabel info; // to display output
+   private JTextField text; // for user input
+   private int count = 0, arrInd = 0, arrLength; // to remember (respectively) the stage of the program,
+   // current index to store search string, number of search strings
+   private String[] search; // array for strings to search for
+   private String link = "", webStr = ""; // the link of the webpage, the HTML/CSS for webpage
+   private boolean allFound = true; // whether or not all the search strings were found in script for webpage
 
    public FinalProjectPanel ()
    {
       text = new JTextField (10);
       text.addActionListener (new TextListener());
       
-      info = new JLabel ("Enter Website link:");
+      info = new JLabel ("Enter Website link:"); // prompts user for webpage link
       
       add (info);
       add (text);
       
    }
-   
-   
-   private class TextListener implements ActionListener
+
+   private class TextListener implements ActionListener // responds to input in text field
    {
 
       public void actionPerformed (ActionEvent event)
@@ -45,18 +42,18 @@ public class FinalProjectPanel extends JPanel
 
          if (count == 0) { // website link entered
             link = text.getText();
-            count++;
+            count++; // progress to next stage by asking for number of search strings
             info.setText("Enter number of strings to search");
          }
          else if (count == 1) { // number of words to enter
             arrLength = Integer.parseInt (text.getText());
-            search = new String[arrLength];
+            search = new String[arrLength]; // stores the number entered
             count++;
-            info.setText("Enter search string " + (arrind + 1));
+            info.setText("Enter search string " + (arrInd + 1)); // progress to next stage for asking for search string
          }
          
-         else if (arrind > arrLength - 1) {
-            info.setText("thanks!");
+         else if (arrInd > arrLength - 1) {
+            info.setText("loading...");
 
             // DEBUG
             for (int i = 0; i < arrLength; i++) {
@@ -87,16 +84,18 @@ public class FinalProjectPanel extends JPanel
          
          }
          
-         else { // words being entered
-            info.setText("Enter search string " + (arrind + 1));
-            search[arrind] = text.getText();
-            arrind++;
-            
-            try {
+         else { // search strings being entered
+            search[arrInd] = text.getText(); // stores in the array
+            arrInd++;
+
+            try { // a pause after each entry so the user doesn't accidentally spam multiple of the same ones
                Thread.sleep(1000);
             } catch (Exception e) {
-               Thread.currentThread().interrupt();
+               System.exit(-3);
             } // catch
+
+            if (arrInd < arrLength) info.setText("Enter search string " + (arrInd + 1));
+            else { info.setText("thanks! hit enter to see your result"); }
             
          } // else
          
